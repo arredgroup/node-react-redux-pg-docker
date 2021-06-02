@@ -35,17 +35,20 @@ app.post('/api/post/create', (req, res) => {
   }
   postModel.insert(nombre, detalle)
     .then(id => {      
-      return res.status(200).send("Post Insertado Correctamente");
+      return res.status(200).send({id: id, nombre:nombre, detalle:detalle});
     })
     .catch(err => {
       return res.status(500).send("Error insertando Post");
     });
 });
 
-app.delete('/api/post/delete/:id', (req, res) => {
-  postModel.eliminar(req.params.id)
+app.post('/api/post/delete/', (req, res) => {
+  const { nombre, detalle, id } = req.body;
+  if (!nombre || !detalle || !id)
+    return res.status(500).send("No hay nombre o detalle o id");
+  postModel.delete(id)
     .then(() => {
-      return res.status(200).send("Post Eliminado Correctamente");
+      return res.status(200).send(req.body);
     })
     .catch(err => {
       return res.status(500).send("Error eliminando");

@@ -1,14 +1,15 @@
 import {
-    INSERT_POST,
-    RETRIEVE_POSTS,
-    DELETE_POST
-  } from "./types";
+  INSERT_POST,
+  RETRIEVE_POSTS,
+  DELETE_POST, FILTER_POST
+} from "./types";
   
   import PostDataService from "../services/post.service";
   
-  export const insertPost = (name, description) => async (dispatch) => {
+  export const insertPost = (name, description) => async (dispatch, getState) => {
     try {
       const data = {
+        id: 0,
         nombre: name, 
         detalle: description
       }
@@ -23,28 +24,42 @@ import {
     }
   };
 
-  export const retrievePosts = () => async (dispatch) => {
+  export const retrievePosts = () => async (dispatch, getState) => {
     try {
       const res = await PostDataService.getAll();
       dispatch({
         type: RETRIEVE_POSTS,
         payload: res.data,
       });
-      return res.data;
     } catch (err) {
       console.log(err);
     }
   };
 
-  export const deletePost = (id) => async (dispatch) => {
+  export const deletePost = (post) => async (dispatch, getState) => {
     try {
-      await PostDataService.delete(id);
+      const data = {
+        id: post.id,
+        nombre: post.nombre,
+        detalle: post.detalle
+      }
+      const res = await PostDataService.delete(data);
   
       dispatch({
         type: DELETE_POST,
-        payload: { id },
+        payload: res.data,
       });
     } catch (err) {
       console.log(err);
     }
   };
+
+  export const filterPost = (word) => (dispatch, getState) => {
+    const data = {
+      word: word
+    }
+    dispatch({
+      type: FILTER_POST,
+      payload: data
+    });
+  }

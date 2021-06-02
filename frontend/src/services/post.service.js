@@ -9,8 +9,8 @@ class PostDataService {
         return http.post("/post/create", data);
     }
 
-    delete(id){
-        return http.delete(`/post/delete/${id}`);
+    delete(data){
+        return http.post("/post/delete/", data);
     }
 }
 

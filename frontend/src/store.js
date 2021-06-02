@@ -2,15 +2,16 @@ import { createStore, applyMiddleware } from 'redux';
 import { composeWithDevTools } from "redux-devtools-extension";
 import thunk from 'redux-thunk';
 import rootReducer from './reducers';
-
-const initialState = {};
+import { retrievePosts } from './actions/posts';
 
 const middleware = [thunk];
 
-const store = createStore(
-  rootReducer,
-  initialState,
-  composeWithDevTools(applyMiddleware(...middleware))
-);
+export default function generateStore(){
+    let store = createStore(
+        rootReducer,
+        composeWithDevTools(applyMiddleware(...middleware))
+    );
 
-export default store;
+    retrievePosts()(store.dispatch, store.getState)
+    return store;
+}

@@ -6,8 +6,9 @@ import * as serviceWorker from './serviceWorker';
 import { Provider } from 'react-redux';
 import {Route, BrowserRouter, Redirect, Switch} from 'react-router-dom';
 import Cards from './components/cards';
-import store from './store';
+import generateStore from './store';
 
+let store = generateStore()
 const Root = (
     <Provider store={store}>
         <BrowserRouter>
